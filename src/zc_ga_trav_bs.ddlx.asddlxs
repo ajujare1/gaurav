@@ -1,0 +1,141 @@
+@Metadata.layer: #CORE
+
+@UI: {
+
+    headerInfo: { typeName: 'Travel',
+                  typeNamePlural: 'Travels',
+                  title: { label: 'Travel', value: 'TravelId' , type: #STANDARD},
+                  description: { value: 'Description' }
+
+    },
+    presentationVariant: [{
+            sortOrder: [{ by: 'TravelId', direction: #DESC }] ,
+            visualizations: [{ type: #AS_LINEITEM }]}]
+    }
+annotate view ZC_GA_TRAV_BS with
+{
+
+  @UI: {
+    facet: [
+    { id: 'TravelID',
+      label: 'Travel',
+      type: #COLLECTION,
+      position: 10
+    
+     },
+    {
+        id: 'Travel',
+        purpose: #STANDARD,
+        type: #IDENTIFICATION_REFERENCE,
+        label: 'Travel Details',
+        parentId: 'TravelID',
+        position: 10
+
+     },
+     { 
+        id: 'Date',
+        purpose: #STANDARD,
+        type: #FIELDGROUP_REFERENCE,
+        label: 'Dates',
+        parentId: 'TravelID',
+        targetQualifier: 'Dates',
+        position: 20
+     
+     },
+          { 
+        id: 'Price',
+        purpose: #STANDARD,
+        type: #FIELDGROUP_REFERENCE,
+        label: 'Prices',
+        parentId: 'TravelID',
+        targetQualifier: 'Prices',
+        position: 30
+     
+     },
+     {
+        id: 'TotalPrice',
+        purpose: #HEADER,
+        type: #DATAPOINT_REFERENCE,
+        position: 10,
+        targetQualifier: 'Price'
+
+        },
+            {
+        id: 'Status',
+        purpose: #HEADER,
+        type: #DATAPOINT_REFERENCE,
+        position: 20,
+        targetQualifier: 'Status'
+
+        } ,
+        {
+        id: 'Booking',
+        purpose: #STANDARD,
+        type: #LINEITEM_REFERENCE,
+        label: 'Booking',
+        targetElement: '_Booking',
+        position: 30
+        
+        }
+            
+
+     ]
+  }
+  @UI.hidden: true
+  TravelUuid;
+  @UI: { lineItem: [{ position: 10 }],
+         identification: [{ position: 10 }],
+         selectionField: [{ position: 10 }]
+          }
+
+  TravelId;
+  @UI: { lineItem: [{ position: 20 }],
+           identification: [{ position: 20 }],
+         selectionField: [{ position: 20 }]
+        }
+  AgencyId;
+  @UI: { lineItem: [{ position: 30 }],
+           identification: [{ position: 30 }],
+          selectionField: [{ position: 30 }]
+  //            ,
+  //            textArrangement: #TEXT_ONLY
+
+        }
+  CustomerId;
+  @UI: { lineItem: [{ position: 40 }],
+//           identification: [{ position: 40 }]
+        fieldGroup: [{ qualifier: 'Dates', position: 10 }]
+        }
+  BeginDate;
+  @UI: { lineItem: [{ position: 50 }],
+//           identification: [{ position: 50 }]
+        fieldGroup: [{ qualifier: 'Dates', position: 20 }]
+        }
+  EndDate;
+  @UI: { lineItem: [{ position: 60 }],
+//   identification: [{ position: 60 }]
+        fieldGroup: [{ qualifier: 'Prices', position: 10 }]
+        }
+  BookingFee;
+  @UI: { lineItem: [{ position: 70 }],
+//   identification: [{ position: 70 }] 
+        fieldGroup: [{ qualifier: 'Prices', position: 20 }]
+}
+  @UI.dataPoint: { qualifier: 'Price', title: 'Total price' }
+
+  TotalPrice;
+  @UI: { lineItem: [{ position: 80 }],
+   identification: [{ position: 80 }]
+        }
+  Description;
+  @UI: { lineItem: [{ position: 90, criticality: 'OverallStatusCriticality' }],
+   identification: [{ position: 90 }]
+        }
+  @UI.dataPoint: { qualifier: 'Status', title: 'Travel Status', criticality: 'OverallStatusCriticality' }
+  Status;
+  @UI.hidden: true
+  Lastchangedat;
+  @UI.hidden: true
+  LocalLastChangedAt;
+
+}
