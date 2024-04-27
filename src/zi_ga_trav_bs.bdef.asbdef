@@ -1,4 +1,4 @@
-managed; //implementation in class zbp_i_ga_trav_bs unique;
+managed implementation in class zcl_bp_i_ga_trav_bs unique;
 //strict (  );
 
 define behavior for ZI_GA_TRAV_BS alias Travel
@@ -13,7 +13,18 @@ etag master LocalLastChangedAt
   association _Booking { create; }
 
   field ( numbering : managed, readonly ) TravelUuid;
+  field ( readonly ) Status, TravelId;
+  field ( mandatory ) AgencyId, CustomerId;
+// Actions
+  action acceptTravel;
+  action rejectTravel;
 
+// Determination
+ determination setInitialStatus on modify { create; }
+ determination setTravelId on save { create; }
+
+// Validations
+ validation validateAgency on save { field AgencyId; create; }
   mapping for zga_trav_bs
     {
       TravelUuid         = travel_uuid;

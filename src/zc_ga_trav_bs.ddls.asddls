@@ -4,19 +4,21 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Metadata.allowExtensions: true
 define root view entity ZC_GA_TRAV_BS
-provider contract transactional_query
+  provider contract transactional_query
   as projection on ZI_GA_TRAV_BS
 {
   key TravelUuid,
       @Search.defaultSearchElement: true
       TravelId,
       @Search.defaultSearchElement: true
-      @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_Agency', element: 'AgencyID' } }]
+      @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_Agency', element: 'AgencyID' },
+                                           useForValidation: true }]
       @ObjectModel.text.element: [ 'AgencyName' ]
       AgencyId,
-      _Agency.Name as AgencyName,
+      _Agency.Name        as AgencyName,
       @Search.defaultSearchElement: true
-      @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_Customer', element: 'CustomerID' } }]
+      @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_Customer', element: 'CustomerID' } ,
+                                            useForValidation: true }]
       @ObjectModel.text.element: [ 'CustomerName' ]
       CustomerId,
       _Customer.FirstName as CustomerName,
@@ -26,7 +28,7 @@ provider contract transactional_query
       BookingFee,
       @Semantics.amount.currencyCode: 'CurrencyCode'
       TotalPrice,
-      @Consumption.valueHelpDefinition: [{ entity: { name: 'I_Currency', element: 'Currency' } }]
+      @Consumption.valueHelpDefinition: [{ entity: { name: 'I_Currency', element: 'Currency' }, useForValidation: true }]
       CurrencyCode,
       Description,
       Status,

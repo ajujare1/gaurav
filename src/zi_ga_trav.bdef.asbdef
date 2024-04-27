@@ -1,18 +1,32 @@
-managed;
-//implementation in class zbp_i_ga_trav unique;
+managed
+implementation in class zbp_i_ga_trav unique;
 //strict ( 2 );
 
 define behavior for ZI_GA_TRAV alias Travel
+
 persistent table zga_trav_bs
 lock master
 etag master LocalLastChangedAt
 //authorization master ( instance )
 {
   field ( numbering : managed, readonly ) TravelUuid;
+  field ( readonly ) TravelId, TotalPrice, Status;
+  field ( readonly ) Lastchangedat, Lastchangedby, Createdat, Createdby, LocalLastChangedAt;
+  field ( mandatory ) AgencyId, CustomerId;
   create;
   update;
   delete;
   association _Booking { create; }
+  action  acceptTravel;
+  action  rejectTravel;
+  internal action recalcTotalPrice;
+
+  determination setInitialStatus on modify { create; }
+  determination calculateTotalPrice on modify { field BookingFee, CurrencyCode; }
+  determination calculateTravelID on save { create; }
+  validation validateAgency on save { field AgencyID; create; }
+  validation validateCustomer on save { field CustomerID; create; }
+  validation validateDates on save { field BeginDate, EndDate; create; }
   mapping for zga_trav_bs
     {
       TravelUuid         = travel_uuid;
@@ -42,24 +56,26 @@ etag master LocalLastChangedAt
 {
   update;
   delete;
-  field ( readonly ) TravelUuid;
+  field ( readonly ) TravelUuid, BookingId;
   association _Travel;
   field ( numbering : managed, readonly ) BookingUUID;
-
+  field ( readonly ) CreatedBy, LastChangedBy, LocalLastChangedAt;
+  determination calculateBookingID on modify { create; }
+  determination calculateTotalPrice on modify { field FlightPrice, CurrencyCode; }
   mapping for zga_book_bs
-  {
-    BookingUUID        = booking_uuid;
-    TravelUUID         = travel_uuid;
-    BookingID          = booking_id;
-    BookingDate        = booking_date;
-    CustomerID         = customer_id;
-    CarrierID          = carrier_id;
-    ConnectionID       = connection_id;
-    FlightDate         = flight_date;
-    FlightPrice        = flight_price;
-    CurrencyCode       = currency_code;
-    CreatedBy          = createdby;
-    LastChangedBy      = lastchangedby;
-    LocalLastChangedAt = local_last_changed_at;
-  }
+    {
+      BookingUUID        = booking_uuid;
+      TravelUUID         = travel_uuid;
+      BookingID          = booking_id;
+      BookingDate        = booking_date;
+      CustomerID         = customer_id;
+      CarrierID          = carrier_id;
+      ConnectionID       = connection_id;
+      FlightDate         = flight_date;
+      FlightPrice        = flight_price;
+      CurrencyCode       = currency_code;
+      CreatedBy          = createdby;
+      LastChangedBy      = lastchangedby;
+      LocalLastChangedAt = local_last_changed_at;
+    }
 }

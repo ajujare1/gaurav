@@ -21,7 +21,7 @@ annotate view ZC_GA_TRAV with
       label: 'Travel',
       type: #COLLECTION,
       position: 10
-    
+
      },
     {
         id: 'Travel',
@@ -32,7 +32,7 @@ annotate view ZC_GA_TRAV with
         position: 10
 
      },
-     { 
+     {
         id: 'Date',
         purpose: #STANDARD,
         type: #FIELDGROUP_REFERENCE,
@@ -40,9 +40,9 @@ annotate view ZC_GA_TRAV with
         parentId: 'TravelID',
         targetQualifier: 'Dates',
         position: 20
-     
+
      },
-          { 
+          {
         id: 'Price',
         purpose: #STANDARD,
         type: #FIELDGROUP_REFERENCE,
@@ -50,7 +50,7 @@ annotate view ZC_GA_TRAV with
         parentId: 'TravelID',
         targetQualifier: 'Prices',
         position: 30
-     
+
      },
      {
         id: 'TotalPrice',
@@ -75,9 +75,9 @@ annotate view ZC_GA_TRAV with
         label: 'Booking',
         targetElement: '_Booking',
         position: 30
-        
+
         }
-            
+
 
      ]
   }
@@ -103,24 +103,24 @@ annotate view ZC_GA_TRAV with
         }
   CustomerId;
   @UI: { lineItem: [{ position: 40 }],
-//           identification: [{ position: 40 }]
+  //           identification: [{ position: 40 }]
         fieldGroup: [{ qualifier: 'Dates', position: 10 }]
         }
   BeginDate;
   @UI: { lineItem: [{ position: 50 }],
-//           identification: [{ position: 50 }]
+  //           identification: [{ position: 50 }]
         fieldGroup: [{ qualifier: 'Dates', position: 20 }]
         }
   EndDate;
   @UI: { lineItem: [{ position: 60 }],
-//   identification: [{ position: 60 }]
+  //   identification: [{ position: 60 }]
         fieldGroup: [{ qualifier: 'Prices', position: 10 }]
         }
   BookingFee;
   @UI: { lineItem: [{ position: 70 }],
-//   identification: [{ position: 70 }] 
+  //   identification: [{ position: 70 }]
         fieldGroup: [{ qualifier: 'Prices', position: 20 }]
-}
+  }
   @UI.dataPoint: { qualifier: 'Price', title: 'Total price' }
 
   TotalPrice;
@@ -128,8 +128,12 @@ annotate view ZC_GA_TRAV with
    identification: [{ position: 80 }]
         }
   Description;
-  @UI: { lineItem: [{ position: 90, criticality: 'OverallStatusCriticality' }],
-   identification: [{ position: 90 }]
+  @UI: { lineItem: [{ position: 90, criticality: 'OverallStatusCriticality' },
+         { type: #FOR_ACTION, dataAction: 'acceptTravel', label: 'Accept Travel' },
+         { type: #FOR_ACTION, dataAction: 'rejectTravel', label: 'Reject Travel'}],
+   identification: [{ position: 90 },
+            { type: #FOR_ACTION, dataAction: 'acceptTravel', label: 'Accept Travel' },
+         { type: #FOR_ACTION, dataAction: 'rejectTravel', label: 'Reject Travel'}]
         }
   @UI.dataPoint: { qualifier: 'Status', title: 'Travel Status', criticality: 'OverallStatusCriticality' }
   Status;
