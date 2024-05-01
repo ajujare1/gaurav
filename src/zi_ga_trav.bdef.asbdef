@@ -1,32 +1,45 @@
 managed
 implementation in class zbp_i_ga_trav unique;
-//strict ( 2 );
+strict ( 1 );
+with draft;
 
 define behavior for ZI_GA_TRAV alias Travel
 
 persistent table zga_trav_bs
-lock master
+draft table zga_dtrav_bs
 etag master LocalLastChangedAt
-//authorization master ( instance )
+lock master total etag Lastchangedat
+authorization master ( instance )
 {
   field ( numbering : managed, readonly ) TravelUuid;
   field ( readonly ) TravelId, TotalPrice, Status;
   field ( readonly ) Lastchangedat, Lastchangedby, Createdat, Createdby, LocalLastChangedAt;
   field ( mandatory ) AgencyId, CustomerId;
   create;
-  update;
-  delete;
-  association _Booking { create; }
-  action  acceptTravel;
-  action  rejectTravel;
+  update(precheck);
+  delete(features : global);
+  association _Booking { create(features : instance); with draft; }
+
+  action ( features : instance ) acceptTravel;
+  action ( features : instance ) rejectTravel;
   internal action recalcTotalPrice;
 
   determination setInitialStatus on modify { create; }
+  side effects
+  { field BookingFee affects field TotalPrice;
+    field CurrencyCode affects field TotalPrice; }
   determination calculateTotalPrice on modify { field BookingFee, CurrencyCode; }
-  determination calculateTravelID on save { create; }
-  validation validateAgency on save { field AgencyID; create; }
-  validation validateCustomer on save { field CustomerID; create; }
+  determination calculateTravelID on modify  { create; }
+  validation validateMandatory on save { field AgencyId, CustomerId; create; }
   validation validateDates on save { field BeginDate, EndDate; create; }
+    draft determine action Prepare   {
+    validation validateMandatory;
+    validation validateDates;
+  }
+   draft action Edit;
+   draft action Activate optimized;
+   draft action Discard;
+   draft action Resume;
   mapping for zga_trav_bs
     {
       TravelUuid         = travel_uuid;
@@ -49,18 +62,23 @@ etag master LocalLastChangedAt
 }
 
 define behavior for ZI_GA_BOOK alias Booking
+implementation in class ZBP_I_GA_BOOK unique
 persistent table zga_book_bs
+draft table zga_dbook_bs
 lock dependent by _Travel
-//authorization dependent by _Travel
+authorization dependent by _Travel
 etag master LocalLastChangedAt
 {
   update;
   delete;
   field ( readonly ) TravelUuid, BookingId;
-  association _Travel;
+  association _Travel { with draft; }
   field ( numbering : managed, readonly ) BookingUUID;
   field ( readonly ) CreatedBy, LastChangedBy, LocalLastChangedAt;
   determination calculateBookingID on modify { create; }
+  side effects
+  { field FlightPrice affects field _Travel.TotalPrice;
+    field CurrencyCode affects field _Travel.TotalPrice; }
   determination calculateTotalPrice on modify { field FlightPrice, CurrencyCode; }
   mapping for zga_book_bs
     {

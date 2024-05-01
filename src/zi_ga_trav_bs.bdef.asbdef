@@ -1,30 +1,45 @@
 managed implementation in class zcl_bp_i_ga_trav_bs unique;
-//strict (  );
+strict ( 1 );
+with draft;
 
 define behavior for ZI_GA_TRAV_BS alias Travel
+draft table zga_travd_bs
 persistent table zga_trav_bs
-lock master
-//authorization master ( instance )
+lock master total etag Lastchangedat
+authorization master ( instance, global )
 etag master LocalLastChangedAt
 {
   create;
   update;
-  delete;
-  association _Booking { create; }
+  delete( features : global );
+  association _Booking { create( features : instance ); with draft; }
 
   field ( numbering : managed, readonly ) TravelUuid;
-  field ( readonly ) Status, TravelId;
+  field ( readonly  ) Status, TravelId, TotalPrice;
   field ( mandatory ) AgencyId, CustomerId;
+//  field ( mandatory:create, readonly : update ) AgencyId, CustomerId;
 // Actions
-  action acceptTravel;
-  action rejectTravel;
+  action (features : instance) acceptTravel result[1] $self ;
+  action (features : instance) rejectTravel result[1] $self ;
+  internal action recalcTotalPrice;
 
 // Determination
  determination setInitialStatus on modify { create; }
  determination setTravelId on save { create; }
+ side effects { field BookingFee affects field TotalPrice; }
+ determination setTotalPrice on modify { field BookingFee; }
+
 
 // Validations
  validation validateAgency on save { field AgencyId; create; }
+ draft determine action Prepare {
+    validation validateAgency;
+ }
+ draft action Edit;
+ draft action Activate optimized;
+ draft action Discard;
+ draft action Resume;
+
   mapping for zga_trav_bs
     {
       TravelUuid         = travel_uuid;
@@ -46,9 +61,11 @@ etag master LocalLastChangedAt
     }
 }
 define behavior for ZI_GA_BOOK_BS alias Booking
+implementation in class zcl_bp_i_ga_book_bs unique
+draft table zga_bookd_bs
 persistent table zga_book_bs
 lock dependent by _Travel
-//authorization dependent by _Travel
+authorization dependent by _Travel
 etag master LocalLastChangedAt
 {
 
@@ -56,8 +73,11 @@ etag master LocalLastChangedAt
   update;
   delete;
   field ( readonly ) TravelUuid;
-  association _Travel;
+  association _Travel { with draft; }
 
+// Determination
+ side effects { field FlightPrice affects field _Travel.TotalPrice; }
+ determination setTotalPrice on modify { field FlightPrice; }
   mapping for zga_book_bs
     {
       BookingUuid        = booking_uuid;

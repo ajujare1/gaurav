@@ -1,0 +1,5 @@
+CLASS zcl_bp_i_ga_book_bs DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zi_ga_trav_bs.
+ENDCLASS.
+
+CLASS zcl_bp_i_ga_book_bs IMPLEMENTATION.
+ENDCLASS.

@@ -112,28 +112,29 @@ annotate view ZC_GA_TRAV with
         fieldGroup: [{ qualifier: 'Dates', position: 20 }]
         }
   EndDate;
-  @UI: { lineItem: [{ position: 60 }],
+  @UI: { 
+//  lineItem: [{ position: 60 }],
   //   identification: [{ position: 60 }]
         fieldGroup: [{ qualifier: 'Prices', position: 10 }]
         }
   BookingFee;
-  @UI: { lineItem: [{ position: 70 }],
+  @UI: { 
+//  lineItem: [{ position: 70 }],
   //   identification: [{ position: 70 }]
         fieldGroup: [{ qualifier: 'Prices', position: 20 }]
   }
   @UI.dataPoint: { qualifier: 'Price', title: 'Total price' }
 
   TotalPrice;
-  @UI: { lineItem: [{ position: 80 }],
+  @UI: {
+   lineItem: [{ position: 80 }],
    identification: [{ position: 80 }]
         }
   Description;
   @UI: { lineItem: [{ position: 90, criticality: 'OverallStatusCriticality' },
          { type: #FOR_ACTION, dataAction: 'acceptTravel', label: 'Accept Travel' },
          { type: #FOR_ACTION, dataAction: 'rejectTravel', label: 'Reject Travel'}],
-   identification: [{ position: 90 },
-            { type: #FOR_ACTION, dataAction: 'acceptTravel', label: 'Accept Travel' },
-         { type: #FOR_ACTION, dataAction: 'rejectTravel', label: 'Reject Travel'}]
+   identification: [{ position: 90 } ]
         }
   @UI.dataPoint: { qualifier: 'Status', title: 'Travel Status', criticality: 'OverallStatusCriticality' }
   Status;

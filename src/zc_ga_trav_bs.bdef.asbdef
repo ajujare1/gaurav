@@ -1,6 +1,7 @@
 projection;
-//strict ( 2 ); //Uncomment this line in order to enable strict mode 2. The strict mode has two variants (strict(1), strict(2)) and is prerequisite to be future proof regarding syntax and to be able to release your BO.
-
+strict ( 1 ); //Uncomment this line in order to enable strict mode 2. The strict mode has two variants (strict(1), strict(2)) and is prerequisite to be future proof regarding syntax and to be able to release your BO.
+use side effects;
+use draft;
 define behavior for ZC_GA_TRAV_BS alias Travel
 use etag
 {
@@ -9,7 +10,12 @@ use etag
   use delete;
   use action acceptTravel;
   use action rejectTravel;
-  use association _Booking { create; }
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Prepare;
+  use action Resume;
+  use association _Booking { create; with draft; }
 }
 
 define behavior for ZC_GA_BOOK_BS alias Booking
@@ -18,5 +24,5 @@ use etag
   use update;
   use delete;
 
-  use association _Travel;
+  use association _Travel { with draft; }
 }

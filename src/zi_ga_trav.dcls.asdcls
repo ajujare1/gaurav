@@ -1,0 +1,12 @@
+@EndUserText.label: 'Travel Access'
+@MappingRole: true
+define role ZI_GA_TRAV {
+    grant
+        select
+            on
+                ZI_GA_TRAV
+                    where
+                   ( Status ) = aspect pfcg_auth ( zostat_ga, zostatus1, actvt = '03' )
+                   and CurrencyCode = 'EUR' OR TRUE;
+                        
+}

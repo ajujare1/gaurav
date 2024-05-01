@@ -24,7 +24,11 @@ define view entity ZC_GA_BOOK_BS
       CarrierId,
       _Carrier.Name as AirlineName,
       @Search.defaultSearchElement: true
-      @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_Flight', element: 'ConnectionID' }                                                   
+      @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_Flight', element: 'ConnectionID' },
+                                           additionalBinding: [{ localElement: 'CarrierId', element: 'AirlineID' },
+                                                               { localElement: 'FlightDate', element: 'FlightDate' },
+                                                               { localElement: 'FlightPrice', element: 'Price'},
+                                                               { localElement: 'CurrencyCode', element: 'CurrencyCode' }]                                                   
                                                      }]
       @ObjectModel.text.element: [ 'AirlineName'  ] 
       ConnectionId,

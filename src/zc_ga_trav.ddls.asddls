@@ -19,7 +19,7 @@ provider contract transactional_query
       _Agency.Name as AgencyName,
       @EndUserText.label: 'Customer'
       @Search.defaultSearchElement: true
-      @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_Customer', element: 'CustomerID' } }]
+      @Consumption.valueHelpDefinition: [{ entity: { name: '/DMO/I_Customer', element: 'CustomerID' } , useForValidation: true }]
       @ObjectModel.text.element: [ 'CustomerName' ]
       CustomerId,
       _Customer.FirstName as CustomerName,
@@ -29,7 +29,7 @@ provider contract transactional_query
       BookingFee,
       @Semantics.amount.currencyCode: 'CurrencyCode'
       TotalPrice,
-      @Consumption.valueHelpDefinition: [{ entity: { name: 'I_Currency', element: 'Currency' } }]
+      @Consumption.valueHelpDefinition: [{ entity: { name: 'I_Currency', element: 'Currency' }, useForValidation: true }]
       CurrencyCode,
       Description,
       Status,
